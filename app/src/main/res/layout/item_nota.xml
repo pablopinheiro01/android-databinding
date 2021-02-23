@@ -6,8 +6,8 @@
             type="br.com.alura.ceep.model.Nota"
             />
         <variable
-            name="listener"
-            type="br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter.ViewHolder" />
+            name="clicaNaNota"
+            type="android.view.View.OnClickListener" />
         <import type="android.view.View"
             />
     </data>
@@ -19,8 +19,7 @@
         android:layout_margin="8dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="1dp"
-<!--        android:onClick="@{listener::clicaNaNota}"-->
-        android:onClick="@{() -> listener.clicaNaNota()}"
+        android:onClick="@{clicaNaNota::onClick}"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
