@@ -8,6 +8,8 @@ import br.com.alura.ceep.ui.extensions.carregaImagem
 //por este motivo nao recebemos um erro ao enviar somente a url na declaração
 //feito uma extensão de imageView para carregar automaticamente
 @BindingAdapter("carregaImagem")
-fun ImageView.carregaImagemPorURL(url: String){
-    carregaImagem(url)
+//devemos ter o cuidado no tratamento desse metodo devido o retorno que pode ser nulo, por este motivo
+//devemos estar atentos ao uso dos metodos onde temos a certeza que os objetos podem ser nulos ou nao
+fun ImageView.carregaImagemPorURL(url: String?){
+    url?.let{ carregaImagem(url) }
 }
