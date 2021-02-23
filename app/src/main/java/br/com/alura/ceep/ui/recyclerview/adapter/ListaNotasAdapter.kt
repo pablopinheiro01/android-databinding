@@ -8,6 +8,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
@@ -49,12 +50,12 @@ class ListaNotasAdapter(
 //        private val campoDescricao: TextView by lazy {
 //            itemView.item_nota_descricao
 //        }
-        private val campoFavorita: ImageView by lazy {
-            itemView.item_nota_favorita
-        }
-        private val campoImagem: ImageView by lazy {
-            itemView.item_nota_imagem
-        }
+//        private val campoFavorita: ImageView by lazy {
+//            itemView.item_nota_favorita
+//        }
+//        private val campoImagem: ImageView by lazy {
+//            itemView.item_nota_imagem
+//        }
 
         init {
             itemView.setOnClickListener {
@@ -74,7 +75,7 @@ class ListaNotasAdapter(
 //            } else {
 //                campoFavorita.visibility = GONE
 //            }
-            campoImagem.carregaImagem(nota.imagemUrl)
+//            campoImagem.carregaImagem(nota.imagemUrl)
 //            if (nota.imagemUrl.isEmpty()) {
 //                campoImagem.visibility = GONE
 //            } else {
@@ -94,4 +95,11 @@ object DiffCallback : DiffUtil.ItemCallback<Nota>() {
 
     override fun areContentsTheSame(oldItem: Nota, newItem: Nota) = oldItem == newItem
 
+}
+
+//este adapter foi criado para carregar a imagem, o primeiro campo ja é detectado automaticamente pelo xml
+//por este motivo nao recebemos um erro ao enviar somente a url na declaração
+@BindingAdapter("carregaImagem")
+fun carregaImagemPorURL(view: ImageView, url: String){
+    view.carregaImagem(url)
 }
