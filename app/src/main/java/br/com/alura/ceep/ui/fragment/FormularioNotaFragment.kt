@@ -40,13 +40,6 @@ class FormularioNotaFragment : Fragment() {
         findNavController()
     }
     private lateinit var notaEncontrada: Nota
-//    private var urlAtual: String = ""
-//    private val campoImagem: ImageView by lazy {
-//        formulario_nota_imagem
-//    }
-//    private val fabAdicionaImagem: FloatingActionButton by lazy {
-//        formulario_nota_fab_adiciona_imagem
-//    }
 
     //como a nota só pe preenchida apos o retorno do observable, criamos a property com a propriedade lateinit garantindo assim a carga da informação
     private lateinit var viewDataBinding: FormularioNotaBinding
@@ -72,8 +65,6 @@ class FormularioNotaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tentaBuscarNota()
-//        configuraFab()
-//        configuraCampoImagem()
     }
 
     private fun tentaBuscarNota() {
@@ -93,47 +84,17 @@ class FormularioNotaFragment : Fragment() {
 
     private fun temIdValido() = notaId != 0L
 
-//    private fun configuraFab() {
-////        fabAdicionaImagem.setOnClickListener {
-////            solicitaImagem()
-////        }
-//    }
-//
-//    private fun configuraCampoImagem() {
-//        configuraVisibilidadeDeComponentes()
-//        campoImagem.setOnClickListener {
-//            solicitaImagem()
-//        }
-//    }
-
     private fun solicitaImagem() {
         CarregaImagemDialog().mostra(requireContext(), this.notaEncontrada.imagemUrl) { urlNova ->
             this.notaEncontrada.imagemUrl = urlNova
             //flexibilizado o uso da imagem
             viewDataBinding.nota = notaEncontrada
-//            configuraImagem()
         }
     }
 
-//    private fun configuraVisibilidadeDeComponentes() {
-//        if (nota.isEmpty()) {
-//            campoImagem.visibility = GONE
-////            fabAdicionaImagem.show()
-//        } else {
-//            campoImagem.visibility = VISIBLE
-////            fabAdicionaImagem.hide()
-//        }
-//    }
-
     private fun inicializaNota(notaEncontrada: Nota) {
         this.notaEncontrada = notaEncontrada
-//        urlAtual = this.notaEncontrada.imagemUrl
     }
-
-//    private fun configuraImagem() {
-//        configuraVisibilidadeDeComponentes()
-//        campoImagem.carregaImagem(urlAtual)
-//    }
 
     private fun appBarParaEdicao() = ComponentesVisuais(appBar = AppBar(titulo = "Editando nota"))
 
@@ -147,7 +108,6 @@ class FormularioNotaFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == R.id.formulario_nota_menu_salva) {
             val notaCriada = criaNota()
-//            salva(notaCriada)
             notaCriada?.let { salva(notaCriada) }
         }
         return super.onOptionsItemSelected(item)
@@ -155,15 +115,6 @@ class FormularioNotaFragment : Fragment() {
 
     private fun criaNota(): Nota? {
         return viewDataBinding.nota?.copy(id=notaEncontrada.id)
-//        val titulo = formulario_nota_titulo.text.toString()
-//        val descricao = formulario_nota_descricao.text.toString()
-//        val favorita = formulario_nota_favorita.isChecked
-//        return notaEncontrada.copy(
-//            titulo = titulo,
-//            descricao = descricao,
-//            favorita = favorita,
-//            imagemUrl = urlAtual
-//        )
     }
 
     private fun salva(notaNova: Nota) {
