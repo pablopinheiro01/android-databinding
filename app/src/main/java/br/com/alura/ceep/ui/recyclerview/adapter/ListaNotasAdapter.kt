@@ -46,9 +46,9 @@ class ListaNotasAdapter(
 //        private val campoTitulo: TextView by lazy {
 //            itemView.item_nota_titulo
 //        }
-        private val campoDescricao: TextView by lazy {
-            itemView.item_nota_descricao
-        }
+//        private val campoDescricao: TextView by lazy {
+//            itemView.item_nota_descricao
+//        }
         private val campoFavorita: ImageView by lazy {
             itemView.item_nota_favorita
         }
@@ -68,18 +68,18 @@ class ListaNotasAdapter(
             this.nota = nota
             viewDataBinding.setVariable(BR.nota, nota)
 //            campoTitulo.text = nota.titulo
-            campoDescricao.text = nota.descricao
-            if (this.nota.favorita) {
-                campoFavorita.visibility = VISIBLE
-            } else {
-                campoFavorita.visibility = GONE
-            }
+//            campoDescricao.text = nota.descricao
+//            if (this.nota.favorita) {
+//                campoFavorita.visibility = VISIBLE
+//            } else {
+//                campoFavorita.visibility = GONE
+//            }
             campoImagem.carregaImagem(nota.imagemUrl)
-            if (nota.imagemUrl.isEmpty()) {
-                campoImagem.visibility = GONE
-            } else {
-                campoImagem.visibility = VISIBLE
-            }
+//            if (nota.imagemUrl.isEmpty()) {
+//                campoImagem.visibility = GONE
+//            } else {
+//                campoImagem.visibility = VISIBLE
+//            }
         }
 
     }
