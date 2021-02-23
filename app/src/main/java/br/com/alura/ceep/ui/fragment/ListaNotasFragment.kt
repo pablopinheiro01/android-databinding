@@ -8,10 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import br.com.alura.ceep.R
+import br.com.alura.ceep.databinding.ListaNotasBinding
 import br.com.alura.ceep.ui.recyclerview.adapter.ListaNotasAdapter
 import br.com.alura.ceep.ui.viewmodel.AppViewModel
 import br.com.alura.ceep.ui.viewmodel.ComponentesVisuais
 import br.com.alura.ceep.ui.viewmodel.ListaNotasViewModel
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.lista_notas.*
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -31,11 +33,13 @@ class ListaNotasFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(
-            R.layout.lista_notas,
-            container,
-            false
-        )
+        //esta classe e gerada automaticamente a partir do nome do layout lista_notas.xml
+        val viewBinding = ListaNotasBinding.inflate(inflater, container, false)
+        //implementação do listener inserido no layout
+        viewBinding.vaiParaFormularioInsercao = View.OnClickListener {
+            vaiParaFormulario()
+        }
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,9 +47,10 @@ class ListaNotasFragment : Fragment() {
         appViewModel.temComponentes = ComponentesVisuais(appBar = null)
         configuraRecyclerView()
         buscaTodasNotas()
-        lista_notas_fab_add.setOnClickListener {
-            vaiParaFormulario()
-        }
+        //nao precisamos mais do fonte abaixo devido a implementação via databinding
+//        lista_notas_fab_add.setOnClickListener {
+//            vaiParaFormulario()
+//        }
     }
 
     private fun buscaTodasNotas() {

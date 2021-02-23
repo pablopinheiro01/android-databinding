@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.ceep.BR
 import br.com.alura.ceep.R
+import br.com.alura.ceep.databinding.ItemNotaBinding
 import br.com.alura.ceep.model.Nota
 import br.com.alura.ceep.ui.extensions.carregaImagem
 import kotlinx.android.synthetic.main.item_nota.view.*
@@ -27,9 +28,7 @@ class ListaNotasAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
-//        val viewCriada = inflater.inflate(R.layout.item_nota, parent, false)
-        val viewDataBinding: ViewDataBinding =
-            DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.item_nota, parent, false)
+        val viewDataBinding = ItemNotaBinding.inflate(inflater, parent, false)
         return ViewHolder(viewDataBinding)
     }
 
@@ -39,52 +38,28 @@ class ListaNotasAdapter(
         }
     }
 
-    inner class ViewHolder(private val viewDataBinding: ViewDataBinding)
+    inner class ViewHolder(private val viewDataBinding: ItemNotaBinding)
         : RecyclerView.ViewHolder(viewDataBinding.root) {
 
         private lateinit var nota: Nota
 
-//        private val campoTitulo: TextView by lazy {
-//            itemView.item_nota_titulo
-//        }
-//        private val campoDescricao: TextView by lazy {
-//            itemView.item_nota_descricao
-//        }
-//        private val campoFavorita: ImageView by lazy {
-//            itemView.item_nota_favorita
-//        }
-//        private val campoImagem: ImageView by lazy {
-//            itemView.item_nota_imagem
-//        }
-
         init {
-            itemView.setOnClickListener {
-                if (::nota.isInitialized) {
-                    onItemClickListener(nota)
-                }
-            }
+            //a funcao de verificacao do click foi transferida para databinding
+            //o Listener aqui representa o ViewHolder que foi definido na variavel dentro de item_nota.xml
+            viewDataBinding.listener = this
         }
 
         fun vincula(nota: Nota) {
             this.nota = nota
-            viewDataBinding.setVariable(BR.nota, nota)
-//            campoTitulo.text = nota.titulo
-//            campoDescricao.text = nota.descricao
-//            if (this.nota.favorita) {
-//                campoFavorita.visibility = VISIBLE
-//            } else {
-//                campoFavorita.visibility = GONE
-//            }
-//            campoImagem.carregaImagem(nota.imagemUrl)
-//            if (nota.imagemUrl.isEmpty()) {
-//                campoImagem.visibility = GONE
-//            } else {
-//                campoImagem.visibility = VISIBLE
-//            }
+            viewDataBinding.nota = nota
         }
 
+        fun clicaNaNota(view:View){
+            if (::nota.isInitialized) {
+                onItemClickListener(nota)
+            }
+        }
     }
-
 }
 
 object DiffCallback : DiffUtil.ItemCallback<Nota>() {
@@ -95,11 +70,4 @@ object DiffCallback : DiffUtil.ItemCallback<Nota>() {
 
     override fun areContentsTheSame(oldItem: Nota, newItem: Nota) = oldItem == newItem
 
-}
-
-//este adapter foi criado para carregar a imagem, o primeiro campo ja é detectado automaticamente pelo xml
-//por este motivo nao recebemos um erro ao enviar somente a url na declaração
-@BindingAdapter("carregaImagem")
-fun carregaImagemPorURL(view: ImageView, url: String){
-    view.carregaImagem(url)
 }
