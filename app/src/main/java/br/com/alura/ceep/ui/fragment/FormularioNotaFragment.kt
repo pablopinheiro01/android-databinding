@@ -39,7 +39,7 @@ class FormularioNotaFragment : Fragment() {
     private val controlador by lazy {
         findNavController()
     }
-    private lateinit var notaEncontrada: Nota
+//    private lateinit var notaEncontrada: Nota
 
     //como a nota só pe preenchida apos o retorno do observable, criamos a property com a propriedade lateinit garantindo assim a carga da informação
     private lateinit var viewDataBinding: FormularioNotaBinding
