@@ -59,6 +59,8 @@ class FormularioNotaFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         viewDataBinding = FormularioNotaBinding.inflate(inflater, container, false)
+        //precisamos indicar o lifeCycleOwner para utilizar o vinculo do ciclo com nossa integração de livedata
+        viewDataBinding.lifecycleOwner = this
         //preenche o onClick na tela cujo o nome da variavel declarada e solicitaImagem
         viewDataBinding.nota = notaData
         viewDataBinding.solicitaImagem = View.OnClickListener {
@@ -89,9 +91,9 @@ class FormularioNotaFragment : Fragment() {
     private fun solicitaImagem() {
         //oneway estamos utilizando esta tecnica de um unico vinculo
         //twoway dois caminhos para fazer o caminho dos dados para o layout, do layout para codigo fonte e do codigo fonte para o layout
-        val urlAtual = this.notaData.imagemUrl.get() ?: ""
+        val urlAtual = this.notaData.imagemUrl.value ?: ""
         CarregaImagemDialog().mostra(requireContext(), urlAtual ) { urlNova ->
-            this.notaData.imagemUrl.set(urlNova)
+            this.notaData.imagemUrl.postValue(urlNova)
         }
     }
 
