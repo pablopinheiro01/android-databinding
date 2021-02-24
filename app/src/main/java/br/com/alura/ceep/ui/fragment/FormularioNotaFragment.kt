@@ -85,6 +85,8 @@ class FormularioNotaFragment : Fragment() {
     private fun temIdValido() = notaId != 0L
 
     private fun solicitaImagem() {
+        //oneway estamos utilizando esta tecnica de um unico vinculo
+        //twoway dois caminhos para fazer o caminho dos dados para o layout, do layout para codigo fonte e do codigo fonte para o layout
         CarregaImagemDialog().mostra(requireContext(), this.notaEncontrada.imagemUrl) { urlNova ->
             this.notaEncontrada.imagemUrl = urlNova
             //flexibilizado o uso da imagem
