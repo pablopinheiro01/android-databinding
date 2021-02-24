@@ -5,7 +5,7 @@ import br.com.alura.ceep.model.Nota
 
 class NotaData (
     private var nota: Nota = Nota(),
-    val titulo: MutableLiveData<String> = MutableLiveData<String>().also { it.value = nota.descricao },
+    val titulo: MutableLiveData<String> = MutableLiveData<String>().also { it.value = nota.titulo },
     val descricao: MutableLiveData<String> = MutableLiveData<String>().also { it.value = nota.descricao },
     val favorita: MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value = nota.favorita },
     val imagemUrl: MutableLiveData<String> = MutableLiveData<String>().also { it.value = nota.imagemUrl }

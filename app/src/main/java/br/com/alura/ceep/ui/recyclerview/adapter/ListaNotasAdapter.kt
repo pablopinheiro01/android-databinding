@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +21,7 @@ import br.com.alura.ceep.BR
 import br.com.alura.ceep.R
 import br.com.alura.ceep.databinding.ItemNotaBinding
 import br.com.alura.ceep.model.Nota
+import br.com.alura.ceep.ui.databinding.NotaData
 import br.com.alura.ceep.ui.extensions.carregaImagem
 import kotlinx.android.synthetic.main.item_nota.view.*
 
@@ -29,7 +33,21 @@ class ListaNotasAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(context)
         val viewDataBinding = ItemNotaBinding.inflate(inflater, parent, false)
-        return ViewHolder(viewDataBinding)
+        return ViewHolder(viewDataBinding).also {
+            viewDataBinding.lifecycleOwner = it
+        }
+    }
+
+    //a partir da sobreescrita deste metodo do adapter vamos conseguir identificar onde se encontra a view no momento da execução
+    override fun onViewAttachedToWindow(holder: ViewHolder) {
+        super.onViewAttachedToWindow(holder)
+        //trabalharemos com o lifecycle para tratar o uso dentro do adapter
+        holder.marcaComoAtivo()
+    }
+
+    override fun onViewDetachedFromWindow(holder: ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        holder.marcaComoDesativado()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -39,32 +57,45 @@ class ListaNotasAdapter(
     }
 
     inner class ViewHolder(private val viewDataBinding: ItemNotaBinding)
-        : RecyclerView.ViewHolder(viewDataBinding.root), View.OnClickListener {
+        : RecyclerView.ViewHolder(viewDataBinding.root), View.OnClickListener, LifecycleOwner {
 
-        private lateinit var nota: Nota
+
+        private val registry = LifecycleRegistry(this)
+
+        override fun getLifecycle(): Lifecycle = registry
 
         init {
-            //a funcao de verificacao do click foi transferida para databinding
-            //o Listener aqui representa o ViewHolder que foi definido na variavel dentro de item_nota.xml
+            //marca como inicializado o ciclo de vida do adapter
+            registry.markState(Lifecycle.State.INITIALIZED)
+        }
+
+        fun marcaComoAtivo(){
+            registry.markState(Lifecycle.State.STARTED)
+        }
+
+        fun marcaComoDesativado(){
+            registry.markState(Lifecycle.State.DESTROYED)
+        }
+
+
+        private lateinit var nota: Nota
+        init {
             viewDataBinding.clicaNaNota = this
         }
 
         fun vincula(nota: Nota) {
             this.nota = nota
-            viewDataBinding.nota = nota
+            val notaData = NotaData(nota)
+            viewDataBinding.nota = notaData
         }
-
-//        fun clicaNaNota(view:View){
-//            if (::nota.isInitialized) {
-//                onItemClickListener(nota)
-//            }
-//        }
 
         override fun onClick(v: View?) {
             if (::nota.isInitialized) {
                 onItemClickListener(nota)
             }
         }
+
+
     }
 }
 

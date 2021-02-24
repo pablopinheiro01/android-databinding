@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
+        <import type="android.view.View" />
         <variable
             name="nota"
-            type="br.com.alura.ceep.model.Nota"
+            type="br.com.alura.ceep.ui.databinding.NotaData"
             />
         <variable
             name="clicaNaNota"
             type="android.view.View.OnClickListener" />
-        <import type="android.view.View"
-            />
+
     </data>
     <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
