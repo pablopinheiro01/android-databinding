@@ -17,6 +17,7 @@ import br.com.alura.ceep.databinding.FormularioNotaBinding
 import br.com.alura.ceep.model.Nota
 import br.com.alura.ceep.repository.Falha
 import br.com.alura.ceep.repository.Sucesso
+import br.com.alura.ceep.ui.databinding.NotaData
 import br.com.alura.ceep.ui.dialog.CarregaImagemDialog
 import br.com.alura.ceep.ui.extensions.carregaImagem
 import br.com.alura.ceep.ui.viewmodel.AppBar
@@ -40,6 +41,9 @@ class FormularioNotaFragment : Fragment() {
         findNavController()
     }
 //    private lateinit var notaEncontrada: Nota
+    private val notaData by lazy {
+    NotaData()
+}
 
     //como a nota só pe preenchida apos o retorno do observable, criamos a property com a propriedade lateinit garantindo assim a carga da informação
     private lateinit var viewDataBinding: FormularioNotaBinding
@@ -56,6 +60,7 @@ class FormularioNotaFragment : Fragment() {
     ): View? {
         viewDataBinding = FormularioNotaBinding.inflate(inflater, container, false)
         //preenche o onClick na tela cujo o nome da variavel declarada e solicitaImagem
+        viewDataBinding.nota = notaData
         viewDataBinding.solicitaImagem = View.OnClickListener {
             solicitaImagem()
         }
@@ -72,13 +77,10 @@ class FormularioNotaFragment : Fragment() {
         if (temIdValido()) {
             viewModel.buscaPorId(notaId).observe(this, Observer {
                 it?.let { notaEncontrada ->
-                    this.viewDataBinding.nota = notaEncontrada
-                    inicializaNota(notaEncontrada)
+                    notaData.atualiza(notaEncontrada)
                     appViewModel.temComponentes = appBarParaEdicao()
                 }
             })
-        } else {
-            inicializaNota(Nota())
         }
     }
 
@@ -87,15 +89,10 @@ class FormularioNotaFragment : Fragment() {
     private fun solicitaImagem() {
         //oneway estamos utilizando esta tecnica de um unico vinculo
         //twoway dois caminhos para fazer o caminho dos dados para o layout, do layout para codigo fonte e do codigo fonte para o layout
-        CarregaImagemDialog().mostra(requireContext(), this.notaEncontrada.imagemUrl) { urlNova ->
-            this.notaEncontrada.imagemUrl = urlNova
-            //flexibilizado o uso da imagem
-            viewDataBinding.nota = notaEncontrada
+        val urlAtual = this.notaData.imagemUrl.get() ?: ""
+        CarregaImagemDialog().mostra(requireContext(), urlAtual ) { urlNova ->
+            this.notaData.imagemUrl.set(urlNova)
         }
-    }
-
-    private fun inicializaNota(notaEncontrada: Nota) {
-        this.notaEncontrada = notaEncontrada
     }
 
     private fun appBarParaEdicao() = ComponentesVisuais(appBar = AppBar(titulo = "Editando nota"))
@@ -116,7 +113,8 @@ class FormularioNotaFragment : Fragment() {
     }
 
     private fun criaNota(): Nota? {
-        return viewDataBinding.nota?.copy(id=notaEncontrada.id)
+//        return viewDataBinding.nota?.copy(id=notaEncontrada.id)
+        return notaData.paraNota()
     }
 
     private fun salva(notaNova: Nota) {
